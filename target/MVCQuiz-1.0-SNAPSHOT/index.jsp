@@ -16,10 +16,11 @@
     <div>
     <h1>The Number Quiz</h1>
         <br />
-        <p>Your Current score is <c:out value="${quiz.score}"></c:out></p>
+        <p>Your Current score is <c:out value="${quizData.score}"></c:out></p>
         <p>Guess the next number in the sequence</p>
         <br/>
-       <p> <c:out value="${quiz.question}"></c:out></p>
+       <p> <c:out value="${quizData.nextQuestion()}"></c:out></p>
+        <br/>
         <form method="post" action="check">
         <p>Your answer: <input type="text" name="answer"></p>
          <br/>

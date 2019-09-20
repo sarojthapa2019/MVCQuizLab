@@ -1,6 +1,7 @@
 package edu.mum.cs.wap.controller;
 
 import edu.mum.cs.wap.modal.Quiz;
+import edu.mum.cs.wap.modal.QuizData;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,40 +14,32 @@ import java.io.IOException;
 
 @WebServlet("/check")
 public class QuizController extends HttpServlet {
-    public QuizController() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException{
-        String answer = request.getParameter("answer");
-        String question ="";
-        int score = 0;
-        HttpSession session = request.getSession();
-
-            Quiz quiz1 = (Quiz)session.getAttribute("quiz");
-            question = quiz1.getQuestion();
-            quiz1.setAnswer(answer);
-            quiz1.checkAnswer();
-            question = quiz1.getRandomQuestion();
-            if(question ==""){
-
-            }
-
-
-        getServletContext().getRequestDispatcher("/index.jsp")
-                .forward(request,response);
+      HttpSession session  = request.getSession();
+        QuizData quizData;
+        if(session.getAttribute("quizData")==null){
+            quizData = new QuizData();
+            session.setAttribute("quizData", quizData);
+        }
+        else{
+                String answer = request.getParameter("answer");
+                quizData = (QuizData)session.getAttribute("quizData");
+                quizData.check(answer);
+                session.setAttribute("quizData",quizData);
+        }
+        if(quizData.finish()){
+            request.getRequestDispatcher("success.jsp").forward(request,response);
+            session.invalidate();
+        }
+        else{
+            request.getRequestDispatcher("index.jsp").forward(request,response);
+        }
 
 
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
-            Quiz quiz = new Quiz();
-            HttpSession session = request.getSession();
-            String question = quiz.getRandomQuestion();
-            quiz.setQuestion(question);
-            session.setAttribute("quiz",quiz);
-            getServletContext().getRequestDispatcher("/index.jsp")
-                .forward(request,response);
+        this.doPost(request,response);
     }
 }

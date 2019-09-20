@@ -3,5 +3,6 @@
   <display-name>W3D4-jstl</display-name>
   <welcome-file-list>
     <welcome-file>check</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
 </web-app>
